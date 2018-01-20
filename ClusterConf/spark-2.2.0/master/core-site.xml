@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<!-- Put site-specific property overrides in this file. -->
+<configuration>
+ <property>
+    <name>fs.trash.interval</name>
+    <value>1440</value>
+ </property>
+ <property>
+    <name>fs.defaultFS</name>
+    <value>hdfs://192.168.42.24:9000</value>
+<!--    <value>hdfs://bigdatacluster</value>-->
+    <final>true</final>
+ </property>
+
+ <property>
+    <name>hadoop.tmp.dir</name>
+    <value>/home/hadoop/hadoop/tmp</value>
+    <final>true</final>
+    <description> A base for other temporary directories</description>
+ </property>
+ <property>
+    <name>ha.zookeeper.quorum</name>
+    <value>Master1.Hadoop:2881,Slave1.Hadoop:2881,Slave2.Hadoop:2881</value>
+ </property>
+ <property>
+    <name>ha.zookeeper.session-timeout.ms</name>
+    <value>300000</value>
+ </property>
+ <property>
+  <name>io.file.buffer.size</name>
+  <value>131072</value>
+ </property>
+<property>
+  <name>hadoop.proxyuser.hadoop.hosts</name>
+  <value>*</value>
+ </property>
+<property>
+  <name>hadoop.proxyuser.hadoop.groups</name>
+  <value>*</value>
+ </property>
+
+<!--snapp
+ <property>
+  <name>io.compression.codecs</name>
+  <value>org.apache.hadoop.io.comperss.SnappyCodec</value>
+</propertsnappy>
+-->
+</configuration>

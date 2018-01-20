@@ -1,0 +1,196 @@
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#  http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+
+# The configuration file needs to define the sources, 
+# the channels and the sinks.
+# Sources, channels and sinks are defined per agent, 
+# in this case called 'agent'
+
+agent.sources = s1 s2 s3 s4 s5 s7
+agent.channels = c1 c2
+agent.sinks = k1 k2
+
+#-------------------------------------------- source----------------------------------------------
+
+#------- [s1] dengbao data
+agent.sources.s1.channels = c2
+agent.sources.s1.type = spooldir
+agent.sources.s1.spoolDir = /data/nssa/WS_SOURCE_0004
+agent.sources.s1.deserializer = org.apache.flume.sink.solr.morphline.BlobDeserializer$Builder
+agent.sources.s1.deserializer.maxBlobLength = 100000000 
+agent.sources.s1.interceptors = i1
+agent.sources.s1.interceptors.i1.type = static
+agent.sources.s1.interceptors.i1.key = key
+agent.sources.s1.interceptors.i1.value = WS_SOURCE_0004
+
+#------- [s2] threat event data
+agent.sources.s2.channels = c1
+agent.sources.s2.type = spooldir
+agent.sources.s2.spoolDir = /data/nssa/WS_SOURCE_0001
+agent.sources.s2.deserializer.maxLineLength = 100000000
+agent.sources.s2.batchSize = 10000
+agent.sources.s2.interceptors = i1
+agent.sources.s2.interceptors.i1.type = static
+agent.sources.s2.interceptors.i1.key = key
+agent.sources.s2.interceptors.i1.value = WS_SOURCE_0001
+
+
+#------- [s3] device assets data
+agent.sources.s3.channels = c1
+agent.sources.s3.type = spooldir
+agent.sources.s3.spoolDir = /data/nssa/WS_SOURCE_0002
+agent.sources.s3.deserializer.maxLineLength = 100000000
+agent.sources.s3.interceptors = i1
+agent.sources.s3.interceptors.i1.type = static
+agent.sources.s3.interceptors.i1.key = key
+agent.sources.s3.interceptors.i1.value = WS_SOURCE_0002
+
+#------- [s4] loudong data
+agent.sources.s4.channels = c2
+agent.sources.s4.type = spooldir
+agent.sources.s4.spoolDir = /data/nssa/WS_SOURCE_0003
+agent.sources.s4.deserializer = org.apache.flume.sink.solr.morphline.BlobDeserializer$Builder
+agent.sources.s4.deserializer.maxBlobLength = 100000000
+agent.sources.s4.interceptors = i1
+agent.sources.s4.interceptors.i1.type = static
+agent.sources.s4.interceptors.i1.key = key
+agent.sources.s4.interceptors.i1.value = WS_SOURCE_0003
+
+#------- [s5] ids data
+agent.sources.s5.channels = c1
+agent.sources.s5.type = spooldir
+agent.sources.s5.spoolDir = /data/nssa/WS_SOURCE_0005
+agent.sources.s5.deserializer.maxLineLength = 100000000
+agent.sources.s5.interceptors = i1
+agent.sources.s5.interceptors.i1.type = static
+agent.sources.s5.interceptors.i1.key = key
+agent.sources.s5.interceptors.i1.value = WS_SOURCE_0005
+
+#-------[s6] threat intelligence
+# ip
+#agent.sources.s6_ip.channels = c3
+#agent.sources.s6_ip.type = spooldir
+#agent.sources.s6_ip.spoolDir = /tmp/testdata/threatIntelligence/ip
+#agent.sources.s6_ip.inputCharset = GBK
+#agent.sources.s6_ip.deserializer = LINE
+#agent.sources.s6_ip.deserializer.maxLineLength = 10000000
+#agent.sources.s6_ip.interceptors = i1
+#agent.sources.s6_ip.interceptors.i1.type = static
+#agent.sources.s6_ip.interceptors.i1.key = key
+#agent.sources.s6_ip.interceptors.i1.value = WS_SOURCE_0006_IP
+# url
+#agent.sources.s6_url.channels = c1
+#agent.sources.s6_url.type = spooldir
+#agent.sources.s6_url.spoolDir = /tmp/testdata/threatIntelligence/url
+#agent.sources.s6_url.inputCharset = GBK
+#agent.sources.s6_url.deserializer = LINE
+#agent.sources.s6_url.deserializer.maxLineLength = 10000000
+#agent.sources.s6_url.interceptors = i1
+#agent.sources.s6_url.interceptors.i1.type = static
+#agent.sources.s6_url.interceptors.i1.key = key
+#agent.sources.s6_url.interceptors.i1.value = WS_SOURCE_0006_URL
+# domain
+#agent.sources.s6_domain.channels = c1
+#agent.sources.s6_domain.type = spooldir
+#agent.sources.s6_domain.spoolDir = /tmp/testdata/threatIntelligence/domain
+#agent.sources.s6_domain.inputCharset = GBK
+#agent.sources.s6_domain.deserializer = LINE
+#agent.sources.s6_domain.deserializer.maxLineLength = 10000000
+#agent.sources.s6_domain.interceptors = i1
+#agent.sources.s6_domain.interceptors.i1.type = static
+#agent.sources.s6_domain.interceptors.i1.key = key
+#agent.sources.s6_domain.interceptors.i1.value = WS_SOURCE_0006_DOMAIN
+# md5
+#agent.sources.s6_md5.channels = c1
+#agent.sources.s6_md5.type = spooldir
+#agent.sources.s6_md5.spoolDir = /tmp/testdata/threatIntelligence/md5
+#agent.sources.s6_md5.inputCharset = GBK
+#agent.sources.s6_md5.deserializer = LINE
+#agent.sources.s6_md5.deserializer.maxBlobLength = 10000000
+#agent.sources.s6_md5.interceptors = i1
+#agent.sources.s6_md5.interceptors.i1.type = static
+#agent.sources.s6_md5.interceptors.i1.key = key
+#agent.sources.s6_md5.interceptors.i1.value = WS_SOURCE_0006_MD5
+
+#------- [s7] threat data
+agent.sources.s7.channels = c1
+agent.sources.s7.type = syslogtcp
+agent.sources.s7.host = 192.168.50.51
+agent.sources.s7.port = 51401
+#agent.sources.s7.spoolDir = /tmp/testdata/ids
+agent.sources.s7.deserializer.maxLineLength = 100000000
+agent.sources.s7.interceptors = i1
+agent.sources.s7.interceptors.i1.type = static
+agent.sources.s7.interceptors.i1.key = key
+agent.sources.s7.interceptors.i1.valuei = WS_SOURCE_0001
+#-------------------------------------------- sink--------------------------------------------------
+
+#------- [k1] kafka sink  
+agent.sinks.k1.channel = c1
+agent.sinks.k1.type = org.apache.flume.sink.kafka.KafkaSink
+agent.sinks.k1.kafka.bootstrap.servers = 192.168.50.51:9092,192.168.50.52:9092,192.168.50.53:9092
+agent.sinks.k1.topic = nssa
+agent.sinks.k1.flumeBatchSize = 100000
+#agent.sinks.k1.useFlumeEventFormat = true
+agent.sinks.k2.channel = c2
+agent.sinks.k2.type = org.apache.flume.sink.kafka.KafkaSink
+agent.sinks.k2.kafka.bootstrap.servers = 192.168.50.51:9092,192.168.50.52:9092,192.168.50.53:9092
+agent.sinks.k2.topic = nssa
+#agent.sinks.k2.flumeBatchSize = 10000
+
+#------- [k2] hdfs sink
+#agent.sinks.k2.channel = c1
+#agent.sinks.k2.type = hdfs
+#agent.sinks.k2.hdfs.path = hdfs://hadoop2:8020/flume/
+#agent.sinks.k2.hdfs.filePrefix = %{basename}
+#agent.sinks.k2.hdfs.fileSuffix = .xml
+#agent.sinks.k2.hdfs.fileType = DataStream
+#agent.sinks.k2.hdfs.writeFormat = Text
+#agent.sinks.k2.hdfs.rollCount = 0
+#agent.sinks.k2.hdfs.rollSize = 0
+#agent.sinks.k2.hdfs.batchsize = 500
+#agent.sinks.k2.hdfs.threadsPllSize = 10
+#agent.sinks.k2.hdfs.idleTimeOut = 0
+#agent.sinks.k2.hdfs.minBlockReplicas = 1
+
+#---------- [k3] elasticsearch sink
+#agent.sinks.k3.channel = c3
+#agent.sinks.k3.type = com.frontier45.flume.sink.elasticsearch2.ElasticSearchSink
+#agent.sinks.k3.hostNames = 192.168.50.55
+#agent.sinks.k3.indexName = tt
+#agent.sinks.k3.indexType = WS_SOURCE_0006
+#agent.sinks.k3.clusterName = my-application
+#agent.sinks.k3.ttl = 5d
+#agent.sinks.k3.batchSize = 500
+#agent.sinks.k3.serializer = org.apache.flume.sink.elasticsearch.ElasticSearchDynamicSerializer
+#------------------------------------------ channel-----------------------------------------------
+
+#-------- [c1] memory channel
+agent.channels.c1.type = memory
+agent.channels.c1.capacity = 100000
+agent.channels.c1.transactionCapacity = 100000
+#-------- [c3] memory channel
+agent.channels.c2.type = memory
+agent.channels.c2.capacity = 1000000
+agent.channels.c2.transactionCapacity = 1000000
+
+#-------- [c2] file channel
+#agent.channels.c2.type = file
+#agent.channels.c2.capacity = 1000000
+#agent.channels.c2.checkpointDir = /home/flume/checkpoint
+#agent.channels.c2.dataDirs = /home/flume/data

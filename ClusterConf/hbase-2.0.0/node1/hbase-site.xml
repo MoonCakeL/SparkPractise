@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+<property>
+    <name>hbase.rootdir</name>
+    <value>hdfs://192.168.42.24:9000/hbasedata</value>
+ </property>
+<property>
+    <name>hbase.cluster.distributed</name>
+    <value>true</value>
+ </property>
+<property>
+    <name>hbase.zookeeper.quorum</name>
+    <value>Master1.Hadoop:2181,Slave1.Hadoop:2181,Slave2.Hadoop:2181</value>
+ </property>
+<!--
+<property>
+#    <name>hbase.zookeeper.property.dataDir</name>
+#    <value>/home/hadoop/zookeeper/hbase</value>
+# </property>
+-->
+<property>
+    <name>hbase.tmp.dir</name>
+    <value>/home/hadoop/hbase/tmp</value>
+ </property>
+<property>
+    <name>hbase.master</name>
+    <value>192.168.42.24:60000</value>
+ </property>
+<property>
+    <name>hbase.zookeeper.property.dataDir</name>
+    <value>/home/hadoop/zookeepe</value>
+ </property>
+<property>
+    <name>hbase.client.write.buffer</name>
+    <value>5242880</value>
+ </property>
+<property>
+    <name>hbase.regionserver.handler.count</name>
+    <value>300</value>
+</property>
+<property>
+    <name>hbase.table.sanity.checks</name>
+    <value>false</value>
+ </property>
+<property>
+    <name>zookeeper.session.timeout</name>
+    <value>300</value>
+ </property>
+<property>
+    <name>hbase.hregion.max.filesize</name>
+    <value>32212254720</value>
+ </property>
+<property>
+    <name>hbase.hregion.majorcompaction</name>
+    <value>1</value>
+ </property>
+<property>
+    <name>dfs.replication</name>
+    <value>3</value>
+ </property>
+<property>
+    <name>hbase.regionserver.region.split.policy</name>
+    <value>org.apache.hadoop.hbase.regionserver.ConstantSizeRegionSplitPolicy</value>
+ </property>
+<property>
+    <name>hbase.regionserver.optionalcacheflushinterval</name>
+    <value>7200000</value>
+ </property>
+<property>
+    <name>hfile.block.cache.size</name>
+    <value>0.3</value>
+ </property>
+<property>
+    <name>hbase.hregion.memstore.flush.size</name>
+    <value>52428800</value>
+ </property>
+<property>
+    <name>hbase.regionserver.global.memstore.size</name>
+    <value>0.5</value>
+ </property>
+<property>
+    <name>hbase.regionserver.global.memstore.size.lower.limit</name>
+    <value>0.5</value>
+ </property>
+<property>
+    <name>dfs.client.socket-timeout</name>
+    <value>600000</value>
+ </property>
+</configuration>

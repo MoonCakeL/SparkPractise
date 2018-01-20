@@ -1,0 +1,36 @@
+create external	table if not exists test (
+				BeginTime BIGINT,
+				EndTime BIGINT,
+				MSISDN STRING,
+				SourceIP STRING,
+				SourcePort STRING,
+				APIP STRING,
+				APMAC STRING,
+				ACIP STRING,
+				ACMAC STRING,
+				RequestType STRING,
+				DestinationIP STRING,
+				DestinationPort STRING,
+				Service STRING,
+				ServiceType1 STRING,
+				ServiceType2 STRING,
+				URL STRING,
+				Domain STRING,
+				SiteName STRING,
+				SiteType1 STRING,
+				SiteType2 STRING,
+				ICP STRING,
+				UpPackNum STRING,
+				DownPackNum STRING,
+				UpPayLoad STRING,
+				DownPayLoad STRING,
+				HttpStatus STRING,
+				UA STRING,
+				ClientType STRING,
+				ResponseTime BIGINT) 
+				partitioned by (CREATE_DATE string)
+				row format delimted fields terminated by '\t';
+
+
+create external table if not exists test (BeginTime BIGINT,EndTime BIGINT,MSISDN STRING,SourceIP STRING,SourcePort STRING,APIP STRING,APMAC STRING,ACIP STRING,ACMAC STRING,RequestType STRING,DestinationIP STRING,DestinationPort STRING,Service STRING,ServiceType1 STRING,ServiceType2 STRING,URL STRING,Domain STRING,SiteName STRING,SiteType1 STRING,SiteType2 STRING,ICP STRING,UpPackNum STRING,DownPackNum STRING,UpPayLoad STRING,DownPayLoad STRING,HttpStatus STRING,UA STRING,ClientType STRING,ResponseTime BIGINT) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t';
+
