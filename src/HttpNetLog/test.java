@@ -7,11 +7,6 @@ import org.apache.spark.sql.SparkSession;
 public class test {
 	public static void main(String[] args){
 
-		//System.out.println(GetHttpNetDataType.httpGetDataType.get(0));
-
-		/*List<Integer> list = Arrays.asList(1,2,3,4,5);
-		System.out.println(list.indexOf(0));*/
-
 
 		SparkSession spark = SparkSession.builder().enableHiveSupport()
 				.master("local").getOrCreate();
