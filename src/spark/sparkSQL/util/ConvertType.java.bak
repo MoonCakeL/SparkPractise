@@ -1,0 +1,158 @@
+package com.run.dsf.util;
+
+import java.sql.Timestamp;
+
+import org.apache.spark.sql.types.DataType;
+import org.apache.spark.sql.types.DataTypes;
+
+public class ConvertType {
+	
+	/**
+	 * @Title:convertDataType
+	 * @Description:对数据类型进行转换
+	 * @param str 数据
+	 * @param dataType 
+	 * @return Object
+	 */
+	public static Object convertDataType(String str, DataType dataType) throws Exception {
+		Object result = null;
+		switch (dataType.toString()) {
+		case "IntegerType":
+			result = Integer.valueOf(str);
+			break;
+		case "LongType":
+			result = Long.valueOf(str);
+			break;
+		case "FloatType":
+			result = Float.valueOf(str);
+			break;
+		case "DoubleType":
+			result = Double.valueOf(str);
+			break;
+		case "BooleanType":
+			result = Boolean.parseBoolean(str);
+			break;
+		case "StringType":
+			result = str;
+			break;
+		case "TimestampType":
+			result = new Timestamp(Long.valueOf(str));
+			break;
+		default:
+			result = str;
+			break;
+		}
+		return result;
+	}
+	
+	/**
+	 * @Title:toESType
+	 * @Description:将spark数据类型转换ES对应数据类型
+	 * @param dataType
+	 * @return String
+	 */
+	public static String toESType(DataType dataType) {
+		String result;
+		switch (dataType.toString()) {
+		case "IntegerType":
+			result = "integer";
+			break;
+		case "LongType":
+			result = "long";
+			break;
+		case "FloatType":
+			result = "float";
+			break;
+		case "DoubleType":
+			result = "double";
+			break;
+		case "BooleanType":
+			result = "boolean";
+			break;
+		case "StringType":
+			result = "text";
+			break;
+		case "TimestampType":
+			result = "date";
+			break;
+		default:
+			result = "text";
+			break;
+		}
+		return result;
+	}
+	
+	/**
+	 *@title:DataToHive.java
+	 *@description:将spark数据类型转换hive对应数据类型
+	 *@author:zhujy
+	 *@date:2017年12月15日
+	 */
+	public static String toHiveType(DataType dataType) {
+		String result = null;
+		switch (dataType.toString()) {
+		case "IntegerType":
+			result = "int";
+			break;
+		case "LongType":
+			result = "bigint";
+			break;
+		case "FloatType":
+			result = "float";
+			break;
+		case "DoubleType":
+			result = "double";
+			break;
+		case "BooleanType":
+			result = "boolean";
+			break;
+		case "StringType":
+			result = "string";
+			break;
+		case "TimestampType":
+			result = "timestamp";
+			break;
+		default:
+			result = "string";
+			break;
+		}
+		return result;
+	}
+	
+	/**
+	 * 根据xml定义的类型转换为sparksql对应的类型
+	 * @param type
+	 * @return DataType
+	 */
+	public static DataType xmlToSparkType(String type) {
+		DataType dataType = DataTypes.StringType;
+		switch (type.toUpperCase()) {
+		case "INT":
+			dataType = DataTypes.IntegerType;
+			break;
+		case "LONG":
+			dataType = DataTypes.LongType;
+			break;
+		case "FLOAT":
+			dataType = DataTypes.FloatType;
+			break;
+		case "DOUBLE":
+			dataType = DataTypes.DoubleType;
+			break;
+		case "BOOLEAN":
+			dataType = DataTypes.BooleanType;
+			break;
+		case "STRING":
+			dataType = DataTypes.StringType;
+			break;
+		case "TIMESTAMP":
+			dataType = DataTypes.TimestampType;
+			break;
+		default:
+			dataType = DataTypes.StringType;
+			break;
+		}
+		return dataType;
+	}
+
+}

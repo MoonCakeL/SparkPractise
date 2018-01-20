@@ -1,0 +1,29 @@
+log4j.rootLogger=DEBUG,stdout,file
+
+#console log
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern=%d %p [%t] %C.%M(%L) | %m%n
+
+#one log file a day
+log4j.appender.file=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.file.File=../logs/horus.log
+log4j.appender.file.Append=true
+log4j.appender.file.DatePattern='.'yyyy-MM-dd
+log4j.appender.file.layout=org.apache.log4j.PatternLayout
+log4j.appender.file.layout.ConversionPattern=%d %p [%t] %C.%M(%L) | %m%n
+
+#DEBUG
+log4j.appender.DEBUG=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.DEBUG.File=../logs/horus.log
+log4j.appender.DEBUG.Append=true
+log4j.appender.DEBUG.DatePattern='.'yyyy-MM-dd
+log4j.appender.DEBUG.layout=org.apache.log4j.PatternLayout
+log4j.appender.DEBUG.layout.ConversionPattern=%d %p [%t] %C.%M(%L) | %m%n
+
+log4j.logger.java.sql.ResultSet=INFO,DEBUG
+log4j.logger.org.apache=INFO
+log4j.logger.org.springframework=INFO
+log4j.logger.java.sql.Connection=INFO,DEBUG
+log4j.logger.java.sql.Statement=INFO,DEBUG
+log4j.logger.java.sql.*=INFO,DEBUG
