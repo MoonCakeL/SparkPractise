@@ -97,7 +97,6 @@ public class HttpDataToHbaseSchemaByLoad {
 					*/
 		//调用LoadFuncition对数据rdd生成HFile
 		try {
-			HbaseConnectFactory.getInstance();
 			Configuration conf = HbaseConnectFactory.getInstance().getHBaseConfiguration();
 			JavaHBaseContext hbaseContext = new JavaHBaseContext(
 					//通过传入进来的rdd就带着SparkConf，创建JavaSparkContext
@@ -168,9 +167,9 @@ public class HttpDataToHbaseSchemaByLoad {
 					LoadIncrementalHFiles load = new LoadIncrementalHFiles(conf);
 
 					load.doBulkLoad(hfofDir,
-							HbaseConnectFactory.getHbaseConnect().getAdmin(),			//获取admin
-							HbaseConnectFactory.getHbaseConnect().getTable(tableName),	//获取Tbale
-							HbaseConnectFactory.getHbaseConnect().getRegionLocator(tableName)	//获取要存放在那个HRegionServer
+							HbaseConnectFactory.getInstance().getHbaseConnect().getAdmin(),			//获取admin
+							HbaseConnectFactory.getInstance().getHbaseConnect().getTable(tableName),	//获取Tbale
+							HbaseConnectFactory.getInstance().getHbaseConnect().getRegionLocator(tableName)	//获取要存放在那个HRegionServer
 					);
 
 					//完成HFile的load后删除临时目录

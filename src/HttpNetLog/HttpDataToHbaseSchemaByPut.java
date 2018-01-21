@@ -23,15 +23,15 @@ import java.util.List;
 public class HttpDataToHbaseSchemaByPut implements Serializable {
 	private static final Logger logger = LoggerFactory.getLogger(HttpDataToHbaseSchemaByPut.class);
 
-	public static void hbaseByPutGo()/*main(String[] args)*/{
-		SparkConf conf = new SparkConf().setAppName("test");
-				//.setMaster("local");
+	public static void /*hbaseByPutGo()*/main(String[] args){
+		SparkConf conf = new SparkConf().setAppName("test")
+				.setMaster("local");
 		JavaSparkContext sc = new JavaSparkContext(conf);
-		JavaRDD<String[]> rdd = sc.textFile("hdfs://192.168.42.24:9000/data/ncmdp_08500001_Net_20130515164000.txt")
+		JavaRDD<String[]> rdd = sc.textFile("hdfs://192.168.42.24:9000/data/httpnettest.txt")
 				.map( x -> (x.split("\t")));
 
 		HttpDataToHbaseSchemaByPut dataToHbase = new HttpDataToHbaseSchemaByPut();
-		String hbaseTable = "hbaseHttp";
+		String hbaseTable = "hbasetest";
 		dataToHbase.saveByPut(rdd,hbaseTable);
 		//生成HBaseRDD的大小：2993525
 	}
@@ -132,8 +132,7 @@ public class HttpDataToHbaseSchemaByPut implements Serializable {
 	public void createTable(String hbaseTable){
 
 		//懒汉式初始化实例
-		HbaseConnectFactory.getInstance();
-		Connection conn = HbaseConnectFactory.getHbaseConnect();
+		Connection conn = HbaseConnectFactory.getInstance().getHbaseConnect();
 
 		try {
 			Admin admin = conn.getAdmin();

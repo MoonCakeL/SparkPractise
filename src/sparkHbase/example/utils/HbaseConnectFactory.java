@@ -51,7 +51,7 @@ public class HbaseConnectFactory {
 		return hbaseConnectFactory;
 	}
 	//4.创建实例后，获取构造函数实例中的连接
-	public static Connection getHbaseConnect(){
+	public  Connection getHbaseConnect(){
 		return hbaseConnect;		
 	}
 

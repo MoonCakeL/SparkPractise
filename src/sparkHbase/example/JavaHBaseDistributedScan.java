@@ -16,10 +16,7 @@
  */
 package sparkHbase.example;
 
-import java.util.List;
-
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.Scan;
@@ -29,9 +26,10 @@ import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-
 import org.apache.spark.api.java.function.Function;
+import org.apache.spark.api.java.function.VoidFunction;
 import scala.Tuple2;
+import sparkHbase.example.utils.HbaseConnectFactory;
 
 /**
  * This is a simple example of scanning records from HBase
@@ -42,19 +40,21 @@ final public class JavaHBaseDistributedScan {
   private JavaHBaseDistributedScan() {}
 
   public static void main(String[] args) {
-    if (args.length < 1) {
+   /* if (args.length < 1) {
       System.out.println("JavaHBaseDistributedScan {tableName}");
       return;
-    }
+    }*/
 
-    String tableName = args[0];
+    String tableName = "hbaseHttpByload";
 
-    SparkConf sparkConf = new SparkConf().setAppName("JavaHBaseDistributedScan " + tableName);
+    SparkConf sparkConf = new SparkConf().
+			setAppName("JavaHBaseDistributedScan " + tableName)
+			.setMaster("local");
     JavaSparkContext jsc = new JavaSparkContext(sparkConf);
 
     try {
-      Configuration conf = HBaseConfiguration.create();
-
+     // Configuration conf = HBaseConfiguration.create();
+		Configuration conf = HbaseConnectFactory.getInstance().getHBaseConfiguration();
       JavaHBaseContext hbaseContext = new JavaHBaseContext(jsc, conf);
 
       Scan scan = new Scan();
@@ -63,9 +63,18 @@ final public class JavaHBaseDistributedScan {
       JavaRDD<Tuple2<ImmutableBytesWritable, Result>> javaRdd =
               hbaseContext.hbaseRDD(TableName.valueOf(tableName), scan);
 
-      List<String> results = javaRdd.map(new ScanConvertFunction()).collect();
+		javaRdd.foreach(
+				new VoidFunction<Tuple2<ImmutableBytesWritable, Result>>() {
+					@Override
+					public void call(Tuple2<ImmutableBytesWritable, Result> x) throws Exception {
+						System.out.println(x);
+					}
+				}
+		);
 
-      System.out.println("Result Size: " + results.size());
+      //List<String> results = javaRdd.map(new ScanConvertFunction()).collect();
+
+      //System.out.println("Result Size: " + results.size());
     } finally {
       jsc.stop();
     }

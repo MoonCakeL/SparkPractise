@@ -1,6 +1,5 @@
 package sparkHbase.example.utils;
 
-import HttpNetLog.utils.GetHttpNetDataType;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.HBaseConfiguration;
@@ -47,7 +46,7 @@ public class HBaseUtils {
 			for (int i=0;i<columnFamilyArray.length;i++){
 
 				ColumnFamilyDescriptorBuilder columnFamilyDesc =
-						ColumnFamilyDescriptorBuilder.newBuilder(Bytes.toBytes(GetHttpNetDataType.ColumnFamily));
+						ColumnFamilyDescriptorBuilder.newBuilder(Bytes.toBytes(columnFamilyArray[i]));
 				tableDesc.addColumnFamily(columnFamilyDesc.build());
 			}
 
@@ -162,16 +161,20 @@ public class HBaseUtils {
     //删除表
     public static boolean delete(String tableName) throws IOException {
         HBaseAdmin admin = (HBaseAdmin) connection.getAdmin();
-        if (admin.tableExists(TableName.valueOf(tableName))) {
-            try {
-                admin.disableTable(TableName.valueOf(tableName));
-                admin.deleteTable(TableName.valueOf(tableName));
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
-            }
-        }
+        String[] arraysTable = tableName.split(",");
+        for (int i=0; i<arraysTable.length;i++){
+        if (admin.tableExists(TableName.valueOf(arraysTable[i]))) {
+				try {
+					admin.disableTable(TableName.valueOf(arraysTable[i]));
+					admin.deleteTable(TableName.valueOf(arraysTable[i]));
+				} catch (Exception e) {
+					e.printStackTrace();
+					return false;
+				}
+			}
+		}
         return true;
+
     }
 
     //删除ColumnFamily
