@@ -1,6 +1,10 @@
 package sparkHbase.example.utils;
+
+import HttpNetLog.utils.GetHttpNetDataType;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.hbase.*;
+import org.apache.hadoop.hbase.Cell;
+import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.filter.*;
 import org.apache.hadoop.hbase.util.Bytes;
@@ -36,18 +40,18 @@ public class HBaseUtils {
             System.out.println(tableName + " exists!");
             return false;
         } else {
-            String[] columnFamilyArray = columnFamily.split(",");
-			HColumnDescriptor[] hColumnDescriptor = new HColumnDescriptor[columnFamilyArray.length];
-            for (int i = 0; i < hColumnDescriptor.length; i++) {
-                hColumnDescriptor[i] = new HColumnDescriptor(columnFamilyArray[i]);
-            }
-            HTableDescriptor familyDesc = new HTableDescriptor(TableName.valueOf(tableName));
-            for (HColumnDescriptor columnDescriptor : hColumnDescriptor) {
-                familyDesc.addFamily(columnDescriptor);
-            }
-            HTableDescriptor tableDesc = new HTableDescriptor(TableName.valueOf(tableName), familyDesc);
+			TableDescriptorBuilder tableDesc =
+					TableDescriptorBuilder.newBuilder(TableName.valueOf(tableName));
 
-            admin.createTable(tableDesc);
+            String[] columnFamilyArray = columnFamily.split(",");
+			for (int i=0;i<columnFamilyArray.length;i++){
+
+				ColumnFamilyDescriptorBuilder columnFamilyDesc =
+						ColumnFamilyDescriptorBuilder.newBuilder(Bytes.toBytes(GetHttpNetDataType.ColumnFamily));
+				tableDesc.addColumnFamily(columnFamilyDesc.build());
+			}
+
+            admin.createTable(tableDesc.build());
             System.out.println(tableName + " create successfully!");
             return true;
         }
