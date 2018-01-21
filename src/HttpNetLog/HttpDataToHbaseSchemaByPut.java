@@ -20,17 +20,17 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HttpDataToHbaseSchema implements Serializable {
-	private static final Logger logger = LoggerFactory.getLogger(HttpDataToHbaseSchema.class);
+public class HttpDataToHbaseSchemaByPut implements Serializable {
+	private static final Logger logger = LoggerFactory.getLogger(HttpDataToHbaseSchemaByPut.class);
 
-	public static void hbaseGo()/*main(String[] args)*/{
+	public static void hbaseByPutGo()/*main(String[] args)*/{
 		SparkConf conf = new SparkConf().setAppName("test");
 				//.setMaster("local");
 		JavaSparkContext sc = new JavaSparkContext(conf);
 		JavaRDD<String[]> rdd = sc.textFile("hdfs://192.168.42.24:9000/data/ncmdp_08500001_Net_20130515164000.txt")
 				.map( x -> (x.split("\t")));
 
-		HttpDataToHbaseSchema dataToHbase = new HttpDataToHbaseSchema();
+		HttpDataToHbaseSchemaByPut dataToHbase = new HttpDataToHbaseSchemaByPut();
 		String hbaseTable = "hbaseHttp";
 		dataToHbase.saveByPut(rdd,hbaseTable);
 		//生成HBaseRDD的大小：2993525
@@ -49,7 +49,7 @@ public class HttpDataToHbaseSchema implements Serializable {
 		//JavaSparkContext jsc = new JavaSparkContext(rdd.context().getConf());
 
 		TableName tableName = TableName.valueOf(hbaseTable);
-		HttpDataToHbaseSchema dataToHbase = new HttpDataToHbaseSchema();
+		HttpDataToHbaseSchemaByPut dataToHbase = new HttpDataToHbaseSchemaByPut();
 		//检查、建表
 		dataToHbase.createTable(hbaseTable);
 
@@ -79,7 +79,7 @@ public class HttpDataToHbaseSchema implements Serializable {
 						bytes[3]=(x[i-2]);
 						returnList.add(bytes);
 					}
-					System.out.println("循环结束后returnList大小："+returnList.size());
+					logger.info("循环结束后returnList大小："+returnList.size());
 
 				}
 				//最后需要迭代返回输出，迭代的是bytesList中的每一个byte[]的对象
@@ -88,8 +88,6 @@ public class HttpDataToHbaseSchema implements Serializable {
 				return returnList.iterator();
 			}
 		);
-
-		System.out.println("生成HBaseRDD的大小：" + hbaseRDD.count());
 
 		//调用PutFuncition
 		try {

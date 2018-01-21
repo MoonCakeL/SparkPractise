@@ -11,9 +11,8 @@ public class SparkStart {
 
 		//looger.info("SparkAppliction 启动,开启SparkStreaming");
 		//HttpDataStreamSchema.StreamSpark();
-		HttpDataToHbaseSchema.hbaseGo();
-
-
+		//HttpDataToHbaseSchemaByPut.hbaseByPutGo();
+		HttpDataToHbaseSchemaByLoad.hbaseByLoadGo();
 	}
 
 }
