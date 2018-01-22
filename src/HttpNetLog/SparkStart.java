@@ -12,7 +12,13 @@ public class SparkStart {
 		//looger.info("SparkAppliction 启动,开启SparkStreaming");
 		//HttpDataStreamSchema.StreamSpark();
 		//HttpDataToHbaseSchemaByPut.hbaseByPutGo();
-		HttpDataToHbaseSchemaByLoad.hbaseByLoadGo();
+		//HttpDataToHbaseSchemaByLoad.hbaseByLoadGo();
+
+		HttpDataScanrowKey scanrowKey = new HttpDataScanrowKey();
+		HttpDataGetFromHBase getFromHBase = new HttpDataGetFromHBase();
+
+		getFromHBase.getHbase(scanrowKey.getrowKey());
+
 	}
 
 }

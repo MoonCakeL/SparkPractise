@@ -24,9 +24,10 @@ public class test {
 
 		String[] s = new  String[1];
 
-		s[0]="哈哈";
+		/*s[0]="哈哈";
 		s[0]="哈哈2";
-		s[0]="哈哈3";
+		s[0]="哈哈3";*/
+		s[0]=null;
 
 		System.out.println(s[0]);
 	}

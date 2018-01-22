@@ -48,7 +48,7 @@ final public class JavaHBaseBulkPutExample {
 	  /*args[0]="hbaseHttp";
 	  args[1]="D";*/
 
-    String tableName = "hbaseHttp";
+    String tableName = "hbasetest";
     String columnFamily = "D";
 
     SparkConf sparkConf = new SparkConf()
@@ -62,11 +62,11 @@ final public class JavaHBaseBulkPutExample {
       list.add("3," + columnFamily + ",a,3");
       list.add("4," + columnFamily + ",a,4");
       list.add("5," + columnFamily + ",a,5");
-		list.add("1," + columnFamily + ",a1,1");
-		list.add("2," + columnFamily + ",a1,2");
-		list.add("3," + columnFamily + ",a1,3");
-		list.add("4," + columnFamily + ",a1,4");
-		list.add("5," + columnFamily + ",a1,5");
+      list.add("1," + columnFamily + ",a1,1");
+      list.add("2," + columnFamily + ",a1,2");
+      list.add("3," + columnFamily + ",a1,3");
+      list.add("4," + columnFamily + ",a1,4");
+      list.add("5," + columnFamily + ",a1,5");
 
 
       JavaRDD<String> rdd = jsc.parallelize(list);
@@ -91,7 +91,6 @@ final public class JavaHBaseBulkPutExample {
 
     public Put call(String v) throws Exception {
       String[] cells = v.split(",");
-      System.out.println("内部数组大小："+ cells.length);
       Put put = new Put(Bytes.toBytes(cells[0]));
 
       put.addColumn(Bytes.toBytes(cells[1]), Bytes.toBytes(cells[2]),

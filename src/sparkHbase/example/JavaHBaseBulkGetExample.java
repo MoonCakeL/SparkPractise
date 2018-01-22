@@ -18,7 +18,6 @@ package sparkHbase.example;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.Cell;
-import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.Result;
@@ -28,6 +27,7 @@ import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
+import sparkHbase.example.utils.HbaseConnectFactory;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -42,14 +42,16 @@ final public class JavaHBaseBulkGetExample {
   private JavaHBaseBulkGetExample() {}
 
   public static void main(String[] args) {
-    if (args.length < 1) {
+  /*  if (args.length < 1) {
       System.out.println("JavaHBaseBulkGetExample  {tableName}");
       return;
-    }
+    }*/
 
-    String tableName = args[0];
+    String tableName = "hbasetest";
 
-    SparkConf sparkConf = new SparkConf().setAppName("JavaHBaseBulkGetExample " + tableName);
+    SparkConf sparkConf = new SparkConf()
+			.setMaster("local")
+			.setAppName("JavaHBaseBulkGetExample " + tableName);
     JavaSparkContext jsc = new JavaSparkContext(sparkConf);
 
     try {
@@ -62,15 +64,18 @@ final public class JavaHBaseBulkGetExample {
 
       JavaRDD<byte[]> rdd = jsc.parallelize(list);
 
-      Configuration conf = HBaseConfiguration.create();
+      //Configuration conf = HBaseConfiguration.create();
 
+		Configuration conf = HbaseConnectFactory.getInstance().getHBaseConfiguration();
       JavaHBaseContext hbaseContext = new JavaHBaseContext(jsc, conf);
 
-      hbaseContext.bulkGet(TableName.valueOf(tableName), 2, rdd, new GetFunction(),
+      JavaRDD<String> javaRDD = hbaseContext.bulkGet(TableName.valueOf(tableName), 2, rdd, new GetFunction(),
               new ResultFunction());
-    } finally {
-      jsc.stop();
-    }
+
+		javaRDD.foreach(x -> System.out.println("打印结果："+x));
+    } catch (Exception e){
+    	e.getMessage();
+	}
   }
 
   public static class GetFunction implements Function<byte[], Get> {

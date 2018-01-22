@@ -70,6 +70,16 @@ final public class JavaHBaseMapGetPutExample {
         public void call(Tuple2<Iterator<byte[]>, Connection> t)
                 throws Exception {
           Table table = t._2().getTable(TableName.valueOf(tableName));
+          //hbase.client.write.buffer
+			// Default
+			//2097152 2M
+			/*客户端写缓存 默认2M
+			BufferedMutator写入缓冲区的默认大小（以字节为单位）。
+			一个更大的缓冲区需要更多的内存 - 在客户端和服务器端，
+			因为服务器实例化传递的写入缓冲区来处理它 - 但是更大的缓冲区大小减少了RPC的数量。
+			对于估计使用的服务器端内存，
+			评估hbase.client.write.buffer * hbase.regionserver.handler.count*/
+
           BufferedMutator mutator = t._2().getBufferedMutator(TableName.valueOf(tableName));
 
           while (t._1().hasNext()) {
