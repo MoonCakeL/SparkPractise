@@ -17,7 +17,7 @@ public class SparkStart {
 		HttpDataScanrowKey scanrowKey = new HttpDataScanrowKey();
 		HttpDataGetFromHBase getFromHBase = new HttpDataGetFromHBase();
 
-		getFromHBase.getHbase(scanrowKey.getrowKey());
+		//getFromHBase.getHbase(scanrowKey.getrowKey());
 
 	}
 

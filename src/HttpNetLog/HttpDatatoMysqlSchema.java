@@ -1,4 +1,4 @@
-package HttpNetLog.utils;
+package HttpNetLog;
 
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;

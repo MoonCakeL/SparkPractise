@@ -12,6 +12,7 @@ import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -22,17 +23,19 @@ import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import scala.Serializable;
+import scala.Tuple2;
 import sparkHbase.example.utils.HbaseConnectFactory;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class HttpDataGetFromHBase {
-	private static final Logger logger = LoggerFactory.getLogger(HttpDataGetFromHBase.class);
+public class HttpDataGetFromHBasetmp implements Serializable {
+	private static final Logger logger = LoggerFactory.getLogger(HttpDataGetFromHBasetmp.class);
 
 	public static void main(String[] args){
 
-	HttpDataGetFromHBase getFromHBase = new HttpDataGetFromHBase();
+	HttpDataGetFromHBasetmp getFromHBase = new HttpDataGetFromHBasetmp();
 		getFromHBase.getHbase();
 	}
 
@@ -72,7 +75,7 @@ public class HttpDataGetFromHBase {
 							new ResultFunction());
 					logger.info("已完成HBaseGet查询,查询结果为："+ hbaseDFRDD.count() +"条");
 
-					HttpDataGetFromHBase fromHBase = new HttpDataGetFromHBase();
+					HttpDataGetFromHBasetmp fromHBase = new HttpDataGetFromHBasetmp();
 					fromHBase.transformationDF(hbaseDFRDD);
 					logger.info("经HBaseGet，入库条为："+hbaseDFRDD.count());
 
@@ -94,56 +97,73 @@ public class HttpDataGetFromHBase {
 				.config(hbaseRDD.context().getConf())
 				.appName("CreateDataFrameFromHBase")
 				.getOrCreate();
-		//循环完成Row和StructFiled拼装
-		hbaseRDD.foreach(
+
+		JavaRDD<Tuple2<List<Row>,StructType>> rowRDD = hbaseRDD.map(
 				x -> {
-					//row
-					List<Object> rowsList = new ArrayList<Object>(29);
-					//List<Row> rowsList = new ArrayList<>(29);
 
-					//schemaField
-					List<StructField> fieldsList = new ArrayList<StructField>(29);
+					List<StructField> fields = new ArrayList<>();
+					List<Object> objectList = new ArrayList<>();
 
-					for (Map.Entry<String, String> entry : x.entrySet()) {
-						fieldsList.add(
-								DataTypes.createStructField(entry.getKey(),
-										GetHttpNetHBaseType.hbaseGetDataType.get(entry.getKey()),
-										true));
-
-						/*Row row = RowFactory.create(GetHttpNetDataType.convertDataType(
+						for (Map.Entry<String,String> entry : x.entrySet()){
+							//row
+				    		Object o = GetHttpNetDataType.convertDataType(
 								entry.getValue(),
-								GetHttpNetHBaseType.hbaseGetDataType.get(entry.getKey())));*/
+								GetHttpNetHBaseType.hbaseGetDataType.get(entry.getKey()));
 
-						rowsList.add(GetHttpNetDataType.convertDataType(
-								entry.getValue(),
-								GetHttpNetHBaseType.hbaseGetDataType.get(entry.getKey())));
+				    		//fields
+						StructField field = DataTypes.createStructField(
+								entry.getKey(),
+								GetHttpNetHBaseType.hbaseGetDataType.get(entry.getKey()),
+								true
+						);
+
+
+						objectList.add(o);
+						fields.add(field);
 					}
+					List<Row> lists = new ArrayList<>();
 
-					List<Object> lists = new ArrayList<>();
-					lists.add(rowsList);
+					for (Object o: objectList){
+						lists.add(RowFactory.create(o));
 
-					JavaRDD<Object> objRDD = JavaSparkContext.fromSparkContext(hbaseRDD.context()).parallelize(rowsList);
+					};
 
-					JavaRDD<Row> rowRDD = objRDD.map(
-							y -> RowFactory.create(y)
-					);
-					//Row row = RowFactory.create(rowsList.toArray());
-					//List<Row> rowList = Arrays.asList(row);
+					StructType schema = DataTypes.createStructType(fields);
 
-					//Row row = RowFactory.create(rowsList.toArray());
-
-					//创建schema
-					StructType schema = DataTypes.createStructType(fieldsList);
-
-					//创建DataFrame
-					Dataset<Row> dataFrame = spark.createDataFrame(rowRDD,schema);
-
-					dataFrame.show();
-					logger.info("HBase查询返回结果封装DataFrame完成...");
-					//dataFrame.write().format("parquet").mode("append").saveAsTable("fromhbase");
+					return new Tuple2<>(lists,schema);
 				}
 		);
+
+		System.out.println("====");
+		JavaRDD<Row> r1 = rowRDD.map(
+				x -> x._1
+		).flatMap(
+				new FlatMapFunction<List<Row>, Row>() {
+					private static final long serialVersionUID = -5193564823495067011L;
+
+					@Override
+					public Iterator<Row> call(List<Row> rows) throws Exception {
+
+						return rows.iterator();
+					}
+				}
+		);
+
+		StructType schema = rowRDD.first()._2;
+
+		r1.foreach(
+				x -> System.out.println(x.mkString())
+		);
+
+		schema.printTreeString();
+		System.out.println("===="+schema.size()+r1.count());
+		Dataset<Row> df = spark.createDataFrame(r1,schema);
+
+		df.show();
+
 	}
+
+
 
 	public static class GetFunction implements Function<byte[], Get> {
 
