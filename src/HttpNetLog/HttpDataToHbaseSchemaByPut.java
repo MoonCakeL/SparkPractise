@@ -1,7 +1,7 @@
 package HttpNetLog;
 
-import HttpNetLog.utils.GetHttpNetDataType;
-import HttpNetLog.utils.UUIDUtil;
+import HttpNetLog.util.GetHttpNetDataType;
+import HttpNetLog.util.UUIDUtil;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;

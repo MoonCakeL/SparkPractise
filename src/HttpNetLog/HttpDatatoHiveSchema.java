@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static HttpNetLog.utils.GetHttpNetDataType.*;
+import static HttpNetLog.util.GetHttpNetDataType.*;
 
 public class HttpDatatoHiveSchema {
 	private static final Logger logger = LoggerFactory.getLogger(HttpDatatoHiveSchema.class);

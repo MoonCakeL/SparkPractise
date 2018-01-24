@@ -1,6 +1,6 @@
 package sparkHbase.example.utils;
 
-import HttpNetLog.utils.DateUtil;
+import HttpNetLog.util.DateUtil;
 
 import java.util.Date;
 import java.util.UUID;

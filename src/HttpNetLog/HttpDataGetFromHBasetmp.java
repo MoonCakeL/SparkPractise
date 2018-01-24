@@ -1,7 +1,7 @@
 package HttpNetLog;
 
-import HttpNetLog.utils.GetHttpNetDataType;
-import HttpNetLog.utils.GetHttpNetHBaseType;
+import HttpNetLog.util.GetHttpNetDataType;
+import HttpNetLog.util.GetHttpNetHBaseType;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.TableName;
