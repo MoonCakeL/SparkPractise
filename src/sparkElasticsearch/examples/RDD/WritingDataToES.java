@@ -9,7 +9,7 @@ import org.spark_project.guava.collect.ImmutableMap;
 
 import java.util.Map;
 
-public class writingDataToES {
+public class WritingDataToES {
 	public static void main(String[] args){
 		SparkConf sparkConf = new SparkConf()
 				.setMaster("local")

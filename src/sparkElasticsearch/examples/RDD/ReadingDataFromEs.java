@@ -5,13 +5,10 @@ import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.elasticsearch.spark.rdd.api.java.JavaEsSpark;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
-public class ReadingDataFromEsByJava {
-	private static final Logger logger = LoggerFactory.getLogger(ReadingDataFromEsByJava.class);
+public class ReadingDataFromEs {
 	private static final  SparkConf sparkConf = new SparkConf()
 			.setMaster("local")
 			.setAppName("Reading Data From ES")
@@ -31,13 +28,11 @@ public class ReadingDataFromEsByJava {
 	//jsc就可以进行连接操作Elasticsearch
 	private static final JavaSparkContext jsc = new JavaSparkContext(sparkConf);
 
-
-
 		public static void main(String[] args){
 			//esPairRDD();
-			esRDD();
+			//esRDD();
+			esRDDFilter();
 		}
-
 
 		public static void esPairRDD(){
 
@@ -130,8 +125,8 @@ public class ReadingDataFromEsByJava {
 		//ES将返回一个JavaPairRDD<String,Map<String,Object>>的Tuple2的rdd结构
 		//其中：
 		// 	PairRDD中的key为:indexid
-		//	Tuple2元祖中的 t_1 为实际_document中的field字段
-		//	Tuple2元祖中的 t_2 为实际_document中的field字段对应的value
+		//	Tuple2元祖中Map的 t_1 为实际_document中的field字段
+		//	Tuple2元祖中Map的 t_2 为实际_document中的field字段对应的value
 
 	}
 
@@ -296,5 +291,32 @@ public class ReadingDataFromEsByJava {
 		//从以上的过程的就不难发现，es在存储数据和检索数据的过程中都是依靠着对_index
 		//因为使用了负载均衡的分片特性，同时为了查询速度先进行对象检查，然后获得信息
 		//再遍历所有分片，直到最后关闭连接的这个过程，还是很有意思的
+	}
+
+	public static void esRDDFilter(){
+		JavaRDD<Map<String,Object>> esRDD = JavaEsSpark
+				.esRDD(
+						jsc,
+						//_index/_type
+						"estest/20180123",
+						"?q=x*"  //这里的查询基本需要结合DSL语言就可以进行条件过滤了
+				).values();
+
+		JavaRDD<Map<String,Object>> filterEsRDD = esRDD.filter(
+				//只查找包含"201801230000"的数据
+				x -> x.containsValue("201801230000")
+		);
+		filterEsRDD.foreach(
+				x -> {
+					for (Map.Entry entry:x.entrySet()){
+						System.out.println("key:"+entry.getKey()+" value:"+entry.getValue());
+					}
+				}
+		);
+		/*
+		key:name value:x1
+		key:age value:30
+		key:checkintime value:201801230000
+		 */
 	}
 }

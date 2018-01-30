@@ -1,0 +1,18 @@
+)Elasticsearch 对于Spark技术站中的
+ RDD、 SQL、 Streaming、 Structured Streaming(目前为测试版) 都有分别不同的
+ "入口"类，但基本都是esRDD() esJsonRDD() saveToEs*()的方法
+ 所以使用不同的Spark技术站中的技术，需要切换不同的JavaEsSpark*的类
+
+
+ Spark RDD JavaEsSpark.class
+ Spark SQL JavaEsSparkSQL.class
+ Spark Streaming    JavaEsSparkStreaming
+ Structured Streaming 目前为本地的es-habddop版本为elasticsearch-hadoop-5.6.6
+
+ 而es-hadoop6.1的版本中将对它进行支持
+ ES-Hadoop 6.0 introduces support for Spark 2.2 and the new Structured Streaming API.
+ Spark Structured Streaming support is available under the
+ org.elasticsearch.spark.sql
+ and
+ org.elasticsearch.spark.sql.streaming packages.
+
