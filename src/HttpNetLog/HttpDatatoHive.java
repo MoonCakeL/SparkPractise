@@ -3,6 +3,7 @@ package HttpNetLog;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.broadcast.Broadcast;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
@@ -26,13 +27,13 @@ public class HttpDatatoHive {
 		JavaSparkContext sc = new JavaSparkContext(conf);
 		JavaRDD<List<String>> rdd = sc.textFile("hdfs://192.168.42.24:9000/data/ncmdp_08500001_Net_20130515164000.txt")
 				.map( x -> Arrays.asList(x.split("\t")));
-
+		Broadcast<JavaRDD<List<String>>> broadcastRDD = sc.broadcast(rdd);
 		/*JavaRDD<List<String>> rdd = dataRDD.map(
 				x -> Arrays.asList(x.split("\t"))
 		);*/
 
 		HttpDatatoHive datatoHive = new HttpDatatoHive();
-		datatoHive.save(rdd);
+		datatoHive.save(broadcastRDD.getValue());
 	}
 
 	public void save(JavaRDD<List<String>> javaRDD){

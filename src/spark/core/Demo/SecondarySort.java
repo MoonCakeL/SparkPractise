@@ -20,9 +20,14 @@ public class SecondarySort implements Serializable {
 	private static SparkSession spark = SparkSession.builder()
 			.appName("Secondary")
 			.master("local")
-			.getOrCreate();
+			.getOrCreate()
+			;
 
-	private static JavaSparkContext sc = new JavaSparkContext(spark.sparkContext());
+	private static JavaSparkContext sc =
+			new JavaSparkContext(spark.sparkContext());
+					//.getConf()
+					//.set("spark.serializer","org.apache.spark.serializer.KryoSerializer")
+					//.registerKryoClasses(new Class[]{SecondarySortKey.class});
 
 	public static void main(String[] args){
 		SecondaryBySort();
